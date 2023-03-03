@@ -10,4 +10,6 @@ public interface InsuranceService {
 
     Insurance update(Long insuranceId, InsurancePatchBody insurancePatchBody);
 
+    void delete(Long insuranceId);
+
 }

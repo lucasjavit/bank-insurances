@@ -28,4 +28,10 @@ public class InsuranceController {
         return new ResponseEntity<>(insuranceService.update(insuranceId, insurancePatchBody), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{insuranceId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long insuranceId) {
+        insuranceService.delete(insuranceId);
+    }
+
 }

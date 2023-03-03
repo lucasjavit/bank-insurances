@@ -74,6 +74,16 @@ public class InsuranceServiceImpl implements InsuranceService {
         return insuranceRepository.save(insurance);
     }
 
+    @Override
+    public void delete(Long insuranceId) {
+        Insurance insurance = findInsuranceById(insuranceId);
+
+        insurance.setUpdated(LocalDateTime.now());
+        insurance.setActive(false);
+
+        insuranceRepository.save(insurance);
+    }
+
     private Insurance findInsuranceById(Long insuranceId) {
         return insuranceRepository.findById(insuranceId)
                 .orElseThrow(() -> new InsuranceExeption("Insurance not found"));
