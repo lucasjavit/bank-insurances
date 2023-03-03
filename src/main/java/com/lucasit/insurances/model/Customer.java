@@ -2,9 +2,9 @@ package com.lucasit.insurances.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,6 +21,7 @@ public class Customer {
     @Column(name = "account_iD")
     private Long id;
 
+    @NotNull(message = "name cannot be null")
     private String name;
 
     @OneToMany(mappedBy = "customer")
@@ -30,13 +31,5 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     @JsonBackReference
     private List<Insurance> insurances;
-
-    public void addDrivers(Driver driver) {
-        if (this.drivers == null) {
-            this.drivers = new ArrayList<>();
-        }
-
-        this.drivers.add(driver);
-    }
 
 }

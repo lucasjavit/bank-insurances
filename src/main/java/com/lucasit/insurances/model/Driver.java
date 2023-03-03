@@ -8,6 +8,7 @@ import com.lucasit.insurances.rules.CommonDriverRule;
 import com.lucasit.insurances.rules.DriverRule;
 import com.lucasit.insurances.rules.MainDriverRule;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -28,7 +29,9 @@ public class Driver {
     private Long id;
 
     @Column(unique = true)
+    @NotNull(message = "document cannot be null")
     private String document;
+    @NotNull(message = "birthdate cannot be null")
     private LocalDate birthdate;
 
     @ManyToOne

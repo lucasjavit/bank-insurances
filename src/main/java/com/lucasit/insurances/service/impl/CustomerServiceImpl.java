@@ -30,43 +30,63 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public Customer save(CustomerPostBody customerPostBody) {
+
+        validateCustomerPostBody(customerPostBody);
+
         Customer customer = customerRepository.save(CustomerMapper.INSTANCE.toEntity(customerPostBody));
 
-        customerPostBody.getDrivers().forEach(elem -> {
+        validateCustomer(customer);
 
-            Car car = carRepository.findById(elem.getCarId())
-                    .orElseThrow(() -> new InsuranceExeption("Car not founded."));
+        if (customerPostBody.getDrivers() != null) {
 
-            Driver driver = driverRepository.save(Driver.builder()
-                    .document(elem.getDocument())
-                    .birthdate(elem.getBirthdate())
-                    .customer(customer)
-                    .build());
+            customerPostBody.getDrivers().forEach(elem -> {
 
-            CarDriver carDriver = CarDriver.builder()
-                    .carDriverId(new CarDriverId())
-                    .car(car)
-                    .isMainDriver(elem.isMainDriver())
-                    .driver(driver)
-                    .build();
+                Car car = carRepository.findById(elem.getCarId())
+                        .orElseThrow(() -> new InsuranceExeption("Car not founded."));
 
-            car.setCarDrivers(new ArrayList<>());
-            car.getCarDrivers().add(carDriver);
-
-            driver.setCarDrivers(new ArrayList<>());
-            driver.getCarDrivers().add(carDriver);
-
-            carDriverRepository.save(carDriver);
-
-            if (elem.isClaim()) {
-                claimService.save(Claim.builder()
-                        .driver(driver)
-                        .car(car)
+                Driver driver = driverRepository.save(Driver.builder()
+                        .document(elem.getDocument())
+                        .birthdate(elem.getBirthdate())
+                        .customer(customer)
                         .build());
-            }
-        });
+
+                CarDriver carDriver = CarDriver.builder()
+                        .carDriverId(new CarDriverId())
+                        .car(car)
+                        .isMainDriver(elem.isMainDriver())
+                        .driver(driver)
+                        .build();
+
+                car.setCarDrivers(new ArrayList<>());
+                car.getCarDrivers().add(carDriver);
+
+                driver.setCarDrivers(new ArrayList<>());
+                driver.getCarDrivers().add(carDriver);
+
+                carDriverRepository.save(carDriver);
+
+                if (elem.isClaim()) {
+                    claimService.save(Claim.builder()
+                            .driver(driver)
+                            .car(car)
+                            .build());
+                }
+            });
+        }
 
         return customer;
 
+    }
+
+    private void validateCustomer(Customer customer) {
+        if (customer == null) {
+            throw new InsuranceExeption("Customer not founded.");
+        }
+    }
+
+    private void validateCustomerPostBody(CustomerPostBody customerPostBody) {
+        if (customerPostBody == null) {
+            throw new InsuranceExeption("Customer PostBody cannot be null");
+        }
     }
 }

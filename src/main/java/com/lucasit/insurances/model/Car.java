@@ -2,6 +2,7 @@ package com.lucasit.insurances.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -20,9 +21,14 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "car_id")
     private Long id;
+    @NotNull(message = "model cannot be null")
     private String model;
+    @NotNull(message = "model cannot be null")
     private String manufacturer;
+    @Column(name = "year")
+    @NotNull(message = "year cannot be null")
     private String yearCar;
+    @NotNull(message = "model fipe_value be null")
     private BigDecimal fipeValue;
 
     @OneToMany(mappedBy = "car", fetch = FetchType.LAZY)

@@ -45,6 +45,10 @@ public class InsuranceServiceImpl implements InsuranceService {
     @Transactional
     public Insurance save(InsurancePostBody insurancePostBody) {
 
+        if (insurancePostBody == null) {
+            throw new InsuranceExeption("The insurancePostBody cannot be null");
+        }
+
         Customer customer = customerRepository.findById(insurancePostBody.getCustomerId())
                 .orElseThrow(() -> new InsuranceExeption(" Customer not found"));
 
@@ -66,7 +70,13 @@ public class InsuranceServiceImpl implements InsuranceService {
     @Transactional
     public Insurance update(Long insuranceId, InsurancePatchBody insurancePatchBody) {
 
+        if (insuranceId == null || insurancePatchBody == null) {
+            throw new InsuranceExeption("Elementes of request cannot be null");
+        }
+
         Insurance insurance = findInsuranceById(insuranceId);
+
+        validateInsurance(insurance);
 
         insurance.setActive(insurancePatchBody.isActive());
 
@@ -92,6 +102,8 @@ public class InsuranceServiceImpl implements InsuranceService {
     @Override
     public void delete(Long insuranceId) {
         Insurance insurance = findInsuranceById(insuranceId);
+
+        validateInsurance(insurance);
 
         insurance.setUpdated(LocalDateTime.now());
         insurance.setActive(false);
@@ -156,15 +168,10 @@ public class InsuranceServiceImpl implements InsuranceService {
     }
 
     private void validateInsurance(Insurance insurance) {
-        if (insurance.getCustomer() == null) {
-            throw new InsuranceExeption("Customer was not found");
+        if (insurance == null) {
+            throw new InsuranceExeption("Insurance not found.");
         }
-        if (insurance.getCustomer().getDrivers() == null) {
-            throw new InsuranceExeption("Driver was not found");
-        }
-        if (insurance.getCar() == null) {
-            throw new InsuranceExeption("Car was not found");
-        }
+
     }
 
     private Insurance findInsuranceById(Long insuranceId) {
