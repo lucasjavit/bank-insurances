@@ -3,6 +3,10 @@ package com.lucasit.insurances.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.lucasit.insurances.exception.InsuranceExeption;
+import com.lucasit.insurances.rules.CommonDriverRule;
+import com.lucasit.insurances.rules.DriverRule;
+import com.lucasit.insurances.rules.MainDriverRule;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,4 +44,18 @@ public class Driver {
     @JsonBackReference
     private List<Claim> claims;
 
+    public Integer calculateAge() {
+        if (this.birthdate == null) {
+            throw new InsuranceExeption("The birthdate is empty");
+        }
+        return (LocalDate.now().getYear() - this.birthdate.getYear());
+    }
+
+    public DriverRule getRule(boolean isMainDriver) {
+        if (isMainDriver) {
+            return new MainDriverRule();
+        } else {
+            return new CommonDriverRule();
+        }
+    }
 }

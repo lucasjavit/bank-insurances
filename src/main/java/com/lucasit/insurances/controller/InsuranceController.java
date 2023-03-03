@@ -4,6 +4,7 @@ package com.lucasit.insurances.controller;
 import com.lucasit.insurances.model.Insurance;
 import com.lucasit.insurances.request.InsurancePatchBody;
 import com.lucasit.insurances.request.InsurancePostBody;
+import com.lucasit.insurances.request.InsuranceResponse;
 import com.lucasit.insurances.service.InsuranceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,4 +35,8 @@ public class InsuranceController {
         insuranceService.delete(insuranceId);
     }
 
+    @GetMapping("/{insuranceId}")
+    public ResponseEntity<InsuranceResponse> getInsurance(@PathVariable Long insuranceId) {
+        return new ResponseEntity<>(insuranceService.getInsurance(insuranceId), HttpStatus.OK);
+    }
 }
