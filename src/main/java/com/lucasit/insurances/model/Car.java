@@ -25,7 +25,6 @@ public class Car {
     private String model;
     @NotNull(message = "model cannot be null")
     private String manufacturer;
-    @Column(name = "year")
     @NotNull(message = "year cannot be null")
     private String yearCar;
     @NotNull(message = "model fipe_value be null")
