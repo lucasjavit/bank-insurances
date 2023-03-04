@@ -60,7 +60,7 @@ docker build -t yourusername/repository-name .
 
 ```
 
-- Execute o projeto
+- ERun the project
 ```bash
 docker run -p 8080:8080 yourusername/repository-name
 ```
@@ -114,7 +114,6 @@ curl --location 'localhost:8080/insurances/budget' \
 
 #### PATCH
 
-
 ```bash
 curl --location --request PATCH 'localhost:8080/insurances/budget/1' \
 --header 'Content-Type: application/json' \
@@ -136,7 +135,6 @@ curl --location 'localhost:8080/insurances/budget/1' \
 ```
 
 ####  DELETE
-
 
 ```bash
 curl --location --request DELETE 'localhost:8080/insurances/budget/1' \
